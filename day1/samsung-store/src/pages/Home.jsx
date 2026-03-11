@@ -1,4 +1,5 @@
 import React from 'react'
+import ProductGrid from '../components/ProductGrid'
 
 function Home() {
   return (
@@ -55,7 +56,7 @@ function Home() {
   </div>
 </div>
 {/* Top deails section */}
-<h2>TOP DEALS</h2>
+``
 {/* grid container */}
 <div>
 {
@@ -77,6 +78,7 @@ function Home() {
 <div>
 
 </div>
+<ProductGrid/>
     </div>
   )
 }
