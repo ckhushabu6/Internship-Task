@@ -9,7 +9,7 @@ import s251 from '../assets/s251.png'; // Extension check kar lena (.png ya .jpg
 import s252 from '../assets/s252.png';
 import s253 from '../assets/s253.png';
 
-function Home() {
+function SimpleNavbar() {
   const { cartItems } = useCart();
   const totalItems = cartItems?.reduce((acc, item) => acc + item.quantity, 0) || 0;
 
@@ -73,6 +73,15 @@ function Home() {
         alt="Galaxy S26 Ultra View 1"
       />
     </div>
+     {/* Slide 1 */}
+    <div className="outline-none">
+      <img 
+        className='h-[300px] md:h-[500px] w-full object-contain bg-black drop-shadow-[0_20px_50px_rgba(255,255,255,0.2)]' 
+        src={s251} 
+        alt="Galaxy S26 Ultra View 1"
+      />
+    </div>
+
 
     {/* Slide 2 */}
     <div className="outline-none">
@@ -93,38 +102,12 @@ function Home() {
     </div>
   </Slider>
 </div>
-      </div>
-     {/* --- TOP DEALS SECTION --- */}
-      <div className="py-20 px-6 md:px-10 max-w-7xl mx-auto">
-        <h2 className="text-3xl font-bold mb-12 text-gray-900">Weekly Top Deals</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {[
-            { img: "📺", name: "Neo QLED 8K", detail: "Experience pure reality", price: 20000 },
-            { img: "📱", name: "Galaxy Z Fold5", detail: "Unfold your world", price: 30000 },
-            { img: "📸", name: "Galaxy Buds2 Pro", detail: "Crystal clear sound", price: 10000 }
-          ].map((ele, index) => (
-            <div key={index} className="bg-white p-8 rounded-[2rem] shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 flex flex-col items-center text-center group">
-              <div className="text-7xl mb-6 group-hover:rotate-12 transition-transform">{ele.img}</div>
-              <h3 className="text-xl font-bold text-gray-800 mb-2">{ele.name}</h3>
-              <p className="text-gray-500 text-sm mb-6">{ele.detail}</p>
-              <h2 className="text-blue-600 font-black text-2xl mb-6">₹{ele.price.toLocaleString()}</h2>
-              <button className="w-full py-3 border-2 border-blue-600 text-blue-600 rounded-xl font-bold hover:bg-blue-600 hover:text-white transition-all">
-                View Details
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* --- ALL PRODUCTS --- */}
-      <div className="bg-gray-100 py-20 px-6 md:px-10">
-         <div className="max-w-7xl mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-16">All Samsung Products</h2>
-            <ProductGrid />
-         </div>
+      
+     
+    
       </div>
     </div>
   );
 }
 
-export default Home;
+export default SimpleNavbar;

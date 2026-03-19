@@ -2,29 +2,27 @@ import './App.css'
 import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
-import About from './pages/About'
-import Contact from './pages/Contact'
-import Navbar from './components/Navbar'
+import Shop from './pages/Shop'; // Ye line add karein
+import Cart from './pages/Cart' // Naya Cart page import kiya
 import Footer from './components/Footer'
 import ProductDetails from './pages/ProductDetails'
-
+import { CartProvider } from './context/CartContext'
 
 function App() {
-  
-
   return (
-    <>
-   
-   <Navbar/>
-    <Routes>
-        <Route path='/' element={<Home/>}/>
-        <Route path='/about' element={<About/>}/>
-        <Route path='/products' element={<ProductDetails/>}/>
-        <Route path='/contact'  element={<Contact/>}/>
-
-    </Routes>
-    <Footer/>
-    </>
+    <CartProvider>
+      {/* <Navbar /> */}
+      <main className="min-h-screen"> {/* Taaki footer hamesha niche rahe */}
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path="/products" element={<Shop />} />
+          {/* :id zaroori hai product identify karne ke liye */}
+          <Route path='/product/:id' element={<ProductDetails />} /> 
+          <Route path='/cart' element={<Cart />} />
+        </Routes>
+      </main>
+      <Footer />
+    </CartProvider>
   )
 }
 
