@@ -7,22 +7,27 @@ import Cart from './pages/Cart' // Naya Cart page import kiya
 import Footer from './components/Footer'
 import ProductDetails from './pages/ProductDetails'
 import { CartProvider } from './context/CartContext'
+import { AuthProvider } from './context/AuthContext';
+import Login from './pages/Login';
+import SignUp from './pages/SignUp';
 
 function App() {
   return (
+    <AuthProvider>
     <CartProvider>
-      {/* <Navbar /> */}
-      <main className="min-h-screen"> {/* Taaki footer hamesha niche rahe */}
+      <main className="min-h-screen">
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path="/products" element={<Shop />} />
-          {/* :id zaroori hai product identify karne ke liye */}
+          <Route path="/login" element={<Login/>} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path='/product/:id' element={<ProductDetails />} /> 
           <Route path='/cart' element={<Cart />} />
         </Routes>
       </main>
       <Footer />
     </CartProvider>
+    </AuthProvider>
   )
 }
 

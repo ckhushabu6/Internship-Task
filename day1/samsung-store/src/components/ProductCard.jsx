@@ -2,11 +2,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 
+
 function ProductCard({ product }) {
   const { addToCart } = useCart();
 
   return (
-    <div className="group bg-white border border-gray-100 rounded-2xl p-4 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full">
+    <div className="group bg-white border border-gray-100 rounded-[10px] p-4 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full">
       
       {/* Product Image Section */}
       <div className="relative overflow-hidden rounded-xl mb-4 bg-gray-50 flex justify-center items-center h-48 sm:h-56">

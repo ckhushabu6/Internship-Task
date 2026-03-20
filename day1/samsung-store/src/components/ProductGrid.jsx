@@ -2,6 +2,7 @@ import ProductCard from "./ProductCard";
 import products from "../data/products";
 import { Link } from "react-router-dom"; // Link import karein
 
+
 function ProductGrid() {
   return (
     <section className="py-16 px-4 md:px-10 bg-gray-50">
@@ -27,7 +28,7 @@ function ProductGrid() {
       </div>
 
       {/* The Responsive Grid */}
-      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6 md:gap-8">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
