@@ -20,7 +20,9 @@ app.get('/', (req, res) => {
 });
 
 const authRoutes = require("./routes/auth")
+const planRoutes = require("./routes/plan");
 app.use("/api/auth" , authRoutes)
+app.use("/api/plan" , planRoutes);
 
 // server
 app.listen(5000, () => {

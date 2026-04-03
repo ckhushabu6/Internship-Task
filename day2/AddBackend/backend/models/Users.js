@@ -4,10 +4,10 @@ const userSchema = new mongoose.Schema({
   name: String,
   email: String,
   password: String,
-  // age: Number,
-  // weight: Number,
-  // height: Number,
-  // goal: String
+  age: Number,
+  weight: Number,
+  height: Number,
+  goal: String
 });
 
 module.exports = mongoose.model("User", userSchema);
