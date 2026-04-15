@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const mongoose = require('mongoose');
 const ConnectDb = require('./config/ConnectDb.config');
 const authRoute = require('./routes/authRoutes');
@@ -7,9 +8,11 @@ ConnectDb();
 //calling express application
 const app = express();
 
+
 //responsiable to read json data
 app.use(express.json());
-
+app.use(cors());
+console.log(cors)
 //user route
 app.use('/api/user' , authRoute);
 
