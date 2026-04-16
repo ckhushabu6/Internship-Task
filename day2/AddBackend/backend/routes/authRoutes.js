@@ -17,7 +17,7 @@ router.post("/register", async (req, res) => {
     role
   });
 
-  res.json(user);
+  res.json({user : user , msg : "made by khushabuuuuuu......"});
 });
 
 // Login

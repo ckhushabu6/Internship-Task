@@ -3,24 +3,19 @@ const router = express.Router();
 
 const authMiddleware = require("../middleware/authMiddleware");
 const roleMiddleware = require("../middleware/roleMiddleware");
+const {getMyPlans} = require("../controllers/planController");
+const { getUserDietPlan } = require("../controllers/planController");
+const { getAllUsers } = require("../controllers/userController");
 const DietPlan = require("../models/DietPlan");
 
 
 const { generatePlan } = require("../controllers/planController");
 
 router.post("/generate", authMiddleware, generatePlan);
+//router.get("/my-plans", authMiddleware, getMyPlans); // ✅ NEW
+router.get("/all-users", authMiddleware, roleMiddleware(["admin"]), getAllUsers);
+router.get("/my-plan", authMiddleware, getUserDietPlan);
 
-
-
-router.get("/my-plans", authMiddleware, async (req, res) => {
-  try {
-    const plans = await DietPlan.find({ userId: req.user.id });
-    res.json(plans);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
-  }
-});
 
 // Only logged-in users
 // router.post("/generate", authMiddleware, (req, res) => {
@@ -33,6 +28,7 @@ router.get(
   authMiddleware,
   roleMiddleware(["admin"]),
   (req, res) => {
+
     res.json({ message: "All plans (Admin only)" });
   }
 );

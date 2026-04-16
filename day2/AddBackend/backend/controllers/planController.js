@@ -1,10 +1,22 @@
 // controllers/planController.js
+
 const DietPlan = require("../models/DietPlan");
 
-// 📁 src/utils/generatePlan.js
+// ==============================
+// 🔹 PLAN GENERATION LOGIC
+// ==============================
 
 const generatePlanLogic = (data) => {
-  const bmi = (data.weight / ((data.height / 100) ** 2)).toFixed(1);
+  // ✅ Safety check
+  if (!data.weight || !data.height || data.height <= 0) {
+    throw new Error("Invalid weight or height");
+  }
+
+  // ✅ BMI (number, not string)
+  const bmi = parseFloat(
+    (data.weight / ((data.height / 100) ** 2)).toFixed(1)
+  );
+
   const dietType = (data.diet || '').toLowerCase().trim();
   const goal = (data.goal || '').toLowerCase().trim();
 
@@ -28,7 +40,7 @@ const generatePlanLogic = (data) => {
   const goalNote = getGoalNote(goal);
   recommendation += ` ${goalNote}`;
 
-  // 🏋️‍♂️ Workout Plan
+  // 🏋️ Workout Plan
   workoutPlan = getWorkoutPlan(goal);
 
   return {
@@ -40,47 +52,55 @@ const generatePlanLogic = (data) => {
   };
 };
 
+// ==============================
+// 🔹 FOOD FUNCTIONS
+// ==============================
+
 const getUnderweightFoods = (diet) => {
   switch (diet) {
     case 'non-vegetarian':
-      return ['🍗 Chicken', '🥚 Eggs', '🐟 Fish', '🥛 Milk', '🍞 Bread', '💪 Whey Protein Powder'];
+      return ['🍗 Chicken', '🥚 Eggs', '🐟 Fish', '🥛 Milk', '🍞 Bread', '💪 Whey Protein'];
     case 'vegan':
-      return ['🌱 Tofu', '🥜 Nuts', '🍌 Bananas', '🍚 Brown Rice', '💪 Plant-based Protein Powder'];
+      return ['🌱 Tofu', '🥜 Nuts', '🍌 Bananas', '🍚 Brown Rice', '💪 Plant Protein'];
     default:
-      return ['🥛 Milk', '🍚 Rice', '🥜 Peanut Butter', '🥚 Eggs (optional)', '💪 Casein Protein Powder'];
+      return ['🥛 Milk', '🍚 Rice', '🥜 Peanut Butter', '🥚 Eggs', '💪 Casein Protein'];
   }
 };
 
 const getOverweightFoods = (diet) => {
   switch (diet) {
     case 'non-vegetarian':
-      return ['🍗 Grilled Chicken', '🥦 Broccoli', '🍎 Apple', '🐟 Fish', '💪 Lean Whey Protein (Isolate)'];
+      return ['🍗 Grilled Chicken', '🥦 Broccoli', '🍎 Apple', '🐟 Fish', '💪 Whey Isolate'];
     case 'vegan':
-      return ['🥗 Salads', '🥑 Avocados', '🍓 Berries', '🌰 Seeds', '💪 Pea Protein Powder (Unsweetened)'];
+      return ['🥗 Salads', '🥑 Avocados', '🍓 Berries', '🌰 Seeds', '💪 Pea Protein'];
     default:
-      return ['🥬 Leafy Greens', '🍓 Fruits', '🥛 Low-fat Yogurt', '🍲 Lentils', '💪 Slimming Protein Shake (Low-carb)'];
+      return ['🥬 Greens', '🍓 Fruits', '🥛 Low-fat Yogurt', '🍲 Lentils', '💪 Low-carb Shake'];
   }
 };
 
 const getHealthyWeightFoods = (diet) => {
   switch (diet) {
     case 'non-vegetarian':
-      return ['🍗 Chicken', '🐟 Fish', '🍚 Brown Rice', '🥗 Salad', '💪 Whey or Casein Protein (Post-workout)'];
+      return ['🍗 Chicken', '🐟 Fish', '🍚 Brown Rice', '🥗 Salad', '💪 Protein'];
     case 'vegan':
-      return ['🥗 Kale Salad', '🍚 Quinoa', '🥜 Almonds', '🍊 Oranges', '💪 Vegan Protein Blend'];
+      return ['🥗 Kale', '🍚 Quinoa', '🥜 Almonds', '🍊 Fruits', '💪 Vegan Protein'];
     default:
-      return ['🍚 Brown Rice', '🥛 Milk', '🥗 Spinach', '🍎 Fruits', '💪 Balanced Protein Shake'];
+      return ['🍚 Rice', '🥛 Milk', '🥗 Spinach', '🍎 Fruits', '💪 Balanced Protein'];
   }
 };
+
+// ==============================
+// 🔹 GOAL + WORKOUT
+// ==============================
 
 const getGoalNote = (goal) => {
   switch (goal) {
     case 'weight_loss':
-      return '🥗 Goal: Weight Loss – Prioritize calorie control and high-fiber intake.';
+      return '🥗 Goal: Weight Loss – Focus on calorie deficit.';
     case 'weight_gain':
-      return '🥩 Goal: Weight Gain – Increase protein, healthy fats, and complex carbs.';
+      return '🥩 Goal: Weight Gain – Increase protein and calories.';
     case 'maintain_weight':
-      return '🧘 Goal: Maintain – Focus on portion control and consistency.';
+      return '🧘 Goal: Maintain – Stay consistent.';
     default:
       return '';
   }
@@ -90,44 +110,91 @@ const getWorkoutPlan = (goal) => {
   switch (goal) {
     case 'weight_loss':
       return [
-        '🏃 30 mins Cardio (Running or Cycling)',
-        '🏋️ 3 sets of HIIT (Jump Squats, Push-ups, Burpees)',
-        '🧘 Cool-down with 10 mins Yoga or Stretching'
+        '🏃 Cardio 30 mins',
+        '🏋️ HIIT Workout',
+        '🧘 Stretching'
       ];
     case 'weight_gain':
       return [
-        '🏋️ Heavy Weight Lifting (Squats, Deadlifts, Bench Press)',
-        '💪 3 sets of Isolation Exercises (Biceps, Triceps)',
-        '🥤 Post-Workout Protein Shake & 10 mins Stretching'
+        '🏋️ Weight Lifting',
+        '💪 Strength Training',
+        '🥤 Protein Intake'
       ];
     case 'maintain_weight':
       return [
-        '🚶 20 mins Brisk Walking or Light Jog',
-        '🏋️ 2 sets of Full Body Strength (Bodyweight or Dumbbells)',
-        '🧘 Light Yoga for Flexibility & Mindfulness'
+        '🚶 Walking',
+        '🏋️ Light Strength',
+        '🧘 Yoga'
       ];
     default:
-      return ['⚠️ No specific workout – please choose a goal.'];
+      return ['⚠️ Select a goal'];
   }
 };
+
+// ==============================
+// 🔹 CONTROLLERS
+// ==============================
+
+// ✅ GENERATE PLAN
 exports.generatePlan = async (req, res) => {
   try {
     const userId = req.user.id;
-
+// console.log("REQEST HAI YEEEEEE",req)
+// console.log("REQUEST BODY HAI YE ", req.body )
     const result = generatePlanLogic(req.body);
+    //console.log("YE RESULT HAI",result);
 
-    // ✅ Save to DB
     const newPlan = new DietPlan({
-      userId,
+      userId: userId,
       ...result
     });
-
+    console.log(newPlan);
     await newPlan.save();
 
-    res.json(newPlan);
+    res.status(201).json(newPlan);
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error generating plan" });
+
+    res.status(500).json({
+      message: "Error generating plan",
+      error: error.message
+    });
+  }
+};
+
+// ✅ GET ALL USER PLANS
+exports.getMyPlans = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const plans = await DietPlan.find({ user: userId })
+      .sort({ createdAt: -1 });
+
+    res.status(200).json(plans);
+
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Error fetching plans",
+      error: error.message
+    });
+  }
+};
+
+exports.getUserDietPlan = async (req, res) => {
+  try {
+    const userId = req.user.id; // comes from auth middleware
+
+    const plan = await DietPlan.findOne({ userId });
+
+    if (!plan) {
+      return res.status(404).json({ message: "No plan found" });
+    }
+
+    res.json(plan);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
   }
 };
