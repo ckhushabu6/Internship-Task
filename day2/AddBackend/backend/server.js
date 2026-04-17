@@ -3,7 +3,8 @@ const cors = require("cors");
 const mongoose = require('mongoose');
 const ConnectDb = require('./config/ConnectDb.config');
 const authRoute = require('./routes/authRoutes');
-const planRoute = require('./routes/planRoutes')
+const dietplanRoute = require('./routes/dietPlanRoutes')
+const userRoutes = require('./routes/userRoutes')
 ConnectDb();
 //calling express application
 const app = express();
@@ -17,9 +18,10 @@ console.log(cors)
 app.use('/api/user' , authRoute);
 
 // role based controlle
-app.use('/api/access' , planRoute)
+app.use('/api/access' , dietplanRoute)
 
-
+//admin based controller
+app.use('/api/admin', userRoutes )
 
 //For undefine page is 
 app.use((req, res)=>{
