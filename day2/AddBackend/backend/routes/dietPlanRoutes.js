@@ -18,9 +18,19 @@ const {getPlanByUserId} = require("../controllers/userController")
 const {deletePlan} = require("../controllers/userController")
 
 
-router.post("/generate", authMiddleware, generatePlan);
+router.post(
+  "/generate",
+   authMiddleware,
+  generatePlan
+);
 //router.get("/my-plans", authMiddleware, getMyPlans); // ✅ NEW
-router.get("/my-plan", authMiddleware, getUserDietPlan);
+
+
+router.get(
+  "/my-plan",
+  authMiddleware,
+  getUserDietPlan
+);
 
 router.get(
   "/plan/:userId",

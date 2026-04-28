@@ -1,35 +1,39 @@
 const express = require("express");
 const cors = require("cors");
-const mongoose = require('mongoose');
 const ConnectDb = require('./config/ConnectDb.config');
+
 const authRoute = require('./routes/authRoutes');
-const dietplanRoute = require('./routes/dietPlanRoutes')
+const dietplanRoute = require('./routes/dietPlanRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 const userRoutes = require('./routes/userRoutes')
-ConnectDb();
-//calling express application
+require('dotenv').config();
+
+
+
 const app = express();
 
+// DB connect
+ConnectDb();
 
-//responsiable to read json data
-app.use(express.json());
+// Middleware
 app.use(cors());
-console.log(cors)
-//user route
-app.use('/api/user' , authRoute);
+app.use(express.json());
 
-// role based controlle
-app.use('/api/access' , dietplanRoute)
+// Routes
+app.use('/api/auth', authRoute);     // ✅ FIXED
+app.use('/api/plan', dietplanRoute); // ✅ FIXED
+app.use('/api/admin', adminRoutes);
+app.use('/api/user', userRoutes );
 
-//admin based controller
-app.use('/api/admin', userRoutes )
+// Static (for images)
+app.use('/uploads', express.static('uploads'));
 
-//For undefine page is 
-app.use((req, res)=>{
-    res.status(400).json({msg : "Page is not found..."})
-})
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({ msg: "Page not found" });
+});
 
-//assign port to server 
-app.listen(3000 , ()=>{
-    console.log("server is running on port number 3000")
-})
-
+// Server
+app.listen(5000, () => {
+  console.log("Server running on port 5000");
+});

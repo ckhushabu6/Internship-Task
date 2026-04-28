@@ -13,26 +13,27 @@ const generatePlanLogic = (data) => {
   }
 
   // ✅ BMI (number, not string)
-  const bmi = parseFloat(
-    (data.weight / ((data.height / 100) ** 2)).toFixed(1)
-  );
+  const bmi = parseFloat((data.weight / (data.height / 100) ** 2).toFixed(1));
 
-  const dietType = (data.diet || '').toLowerCase().trim();
-  const goal = (data.goal || '').toLowerCase().trim();
+  const dietType = (data.diet || "").toLowerCase().trim();
+  const goal = (data.goal || "").toLowerCase().trim();
 
-  let recommendation = '';
+  let recommendation = "";
   let foodItems = [];
   let workoutPlan = [];
 
   // 🟡 BMI-Based Recommendation
   if (bmi < 18.5) {
-    recommendation = '⚠️ Underweight – You need high-protein meals and supplements to build weight.';
+    recommendation =
+      "⚠️ Underweight – You need high-protein meals and supplements to build weight.";
     foodItems = getUnderweightFoods(dietType);
   } else if (bmi >= 25) {
-    recommendation = '⚠️ Overweight – You need a low-carb, high-fiber diet with lean protein support.';
+    recommendation =
+      "⚠️ Overweight – You need a low-carb, high-fiber diet with lean protein support.";
     foodItems = getOverweightFoods(dietType);
   } else {
-    recommendation = '✅ Normal BMI – Maintain a balanced, nutritious diet with optional supplements.';
+    recommendation =
+      "✅ Normal BMI – Maintain a balanced, nutritious diet with optional supplements.";
     foodItems = getHealthyWeightFoods(dietType);
   }
 
@@ -46,9 +47,12 @@ const generatePlanLogic = (data) => {
   return {
     name: data.name,
     bmi,
+    height: data.height,
+    weight: data.weight,
+    goal: data.goal,
     recommendation,
     foodItems,
-    workoutPlan
+    workoutPlan,
   };
 };
 
@@ -58,34 +62,89 @@ const generatePlanLogic = (data) => {
 
 const getUnderweightFoods = (diet) => {
   switch (diet) {
-    case 'non-vegetarian':
-      return ['🍗 Chicken', '🥚 Eggs', '🐟 Fish', '🥛 Milk', '🍞 Bread', '💪 Whey Protein'];
-    case 'vegan':
-      return ['🌱 Tofu', '🥜 Nuts', '🍌 Bananas', '🍚 Brown Rice', '💪 Plant Protein'];
+    case "non-vegetarian":
+      return [
+        "🍗 Chicken",
+        "🥚 Eggs",
+        "🐟 Fish",
+        "🥛 Milk",
+        "🍞 Bread",
+        "💪 Whey Protein",
+      ];
+    case "vegan":
+      return [
+        "🌱 Tofu",
+        "🥜 Nuts",
+        "🍌 Bananas",
+        "🍚 Brown Rice",
+        "💪 Plant Protein",
+      ];
     default:
-      return ['🥛 Milk', '🍚 Rice', '🥜 Peanut Butter', '🥚 Eggs', '💪 Casein Protein'];
+      return [
+        "🥛 Milk",
+        "🍚 Rice",
+        "🥜 Peanut Butter",
+        "🥚 Eggs",
+        "💪 Casein Protein",
+      ];
   }
 };
 
 const getOverweightFoods = (diet) => {
   switch (diet) {
-    case 'non-vegetarian':
-      return ['🍗 Grilled Chicken', '🥦 Broccoli', '🍎 Apple', '🐟 Fish', '💪 Whey Isolate'];
-    case 'vegan':
-      return ['🥗 Salads', '🥑 Avocados', '🍓 Berries', '🌰 Seeds', '💪 Pea Protein'];
+    case "non-vegetarian":
+      return [
+        "🍗 Grilled Chicken",
+        "🥦 Broccoli",
+        "🍎 Apple",
+        "🐟 Fish",
+        "💪 Whey Isolate",
+      ];
+    case "vegan":
+      return [
+        "🥗 Salads",
+        "🥑 Avocados",
+        "🍓 Berries",
+        "🌰 Seeds",
+        "💪 Pea Protein",
+      ];
     default:
-      return ['🥬 Greens', '🍓 Fruits', '🥛 Low-fat Yogurt', '🍲 Lentils', '💪 Low-carb Shake'];
+      return [
+        "🥬 Greens",
+        "🍓 Fruits",
+        "🥛 Low-fat Yogurt",
+        "🍲 Lentils",
+        "💪 Low-carb Shake",
+      ];
   }
 };
 
 const getHealthyWeightFoods = (diet) => {
   switch (diet) {
-    case 'non-vegetarian':
-      return ['🍗 Chicken', '🐟 Fish', '🍚 Brown Rice', '🥗 Salad', '💪 Protein'];
-    case 'vegan':
-      return ['🥗 Kale', '🍚 Quinoa', '🥜 Almonds', '🍊 Fruits', '💪 Vegan Protein'];
+    case "non-vegetarian":
+      return [
+        "🍗 Chicken",
+        "🐟 Fish",
+        "🍚 Brown Rice",
+        "🥗 Salad",
+        "💪 Protein",
+      ];
+    case "vegan":
+      return [
+        "🥗 Kale",
+        "🍚 Quinoa",
+        "🥜 Almonds",
+        "🍊 Fruits",
+        "💪 Vegan Protein",
+      ];
     default:
-      return ['🍚 Rice', '🥛 Milk', '🥗 Spinach', '🍎 Fruits', '💪 Balanced Protein'];
+      return [
+        "🍚 Rice",
+        "🥛 Milk",
+        "🥗 Spinach",
+        "🍎 Fruits",
+        "💪 Balanced Protein",
+      ];
   }
 };
 
@@ -95,39 +154,27 @@ const getHealthyWeightFoods = (diet) => {
 
 const getGoalNote = (goal) => {
   switch (goal) {
-    case 'weight_loss':
-      return '🥗 Goal: Weight Loss – Focus on calorie deficit.';
-    case 'weight_gain':
-      return '🥩 Goal: Weight Gain – Increase protein and calories.';
-    case 'maintain_weight':
-      return '🧘 Goal: Maintain – Stay consistent.';
+    case "weight_loss":
+      return "🥗 Goal: Weight Loss – Focus on calorie deficit.";
+    case "weight_gain":
+      return "🥩 Goal: Weight Gain – Increase protein and calories.";
+    case "maintain_weight":
+      return "🧘 Goal: Maintain – Stay consistent.";
     default:
-      return '';
+      return "";
   }
 };
 
 const getWorkoutPlan = (goal) => {
   switch (goal) {
-    case 'weight_loss':
-      return [
-        '🏃 Cardio 30 mins',
-        '🏋️ HIIT Workout',
-        '🧘 Stretching'
-      ];
-    case 'weight_gain':
-      return [
-        '🏋️ Weight Lifting',
-        '💪 Strength Training',
-        '🥤 Protein Intake'
-      ];
-    case 'maintain_weight':
-      return [
-        '🚶 Walking',
-        '🏋️ Light Strength',
-        '🧘 Yoga'
-      ];
+    case "weight_loss":
+      return ["🏃 Cardio 30 mins", "🏋️ HIIT Workout", "🧘 Stretching"];
+    case "weight_gain":
+      return ["🏋️ Weight Lifting", "💪 Strength Training", "🥤 Protein Intake"];
+    case "maintain_weight":
+      return ["🚶 Walking", "🏋️ Light Strength", "🧘 Yoga"];
     default:
-      return ['⚠️ Select a goal'];
+      return ["⚠️ Select a goal"];
   }
 };
 
@@ -139,23 +186,26 @@ const getWorkoutPlan = (goal) => {
 exports.generatePlan = async (req, res) => {
   try {
     const userId = req.user.id;
-// console.log("REQEST HAI YEEEEEE",req)
-// console.log("REQUEST BODY HAI YE ", req.body )
+
+    // ✅ validation
+    const { height, weight, goal } = req.body;
+    if (!height || !weight || !goal) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
     const result = generatePlanLogic(req.body);
-    //console.log("YE RESULT HAI",result);
 
-    const newPlan = new DietPlan({
-      userId: userId,
-      ...result
-    });
-    console.log(newPlan);
-    await newPlan.save();
+    // ✅ update or create
+    const updatedPlan = await DietPlan.findOneAndUpdate(
+      { userId },
+      { ...result },
+      { new: true, upsert: true }
+    );
 
-    res.status(201).json(newPlan);
+    res.status(200).json(updatedPlan);
 
   } catch (error) {
     console.error(error);
-
     res.status(500).json({
       message: "Error generating plan",
       error: error.message
@@ -168,17 +218,15 @@ exports.getMyPlans = async (req, res) => {
   try {
     const userId = req.user.id;
 
-    const plans = await DietPlan.find({ user: userId })
-      .sort({ createdAt: -1 });
+    const plans = await DietPlan.find({ user: userId }).sort({ createdAt: -1 });
 
     res.status(200).json(plans);
-
   } catch (error) {
     console.error(error);
 
     res.status(500).json({
       message: "Error fetching plans",
-      error: error.message
+      error: error.message,
     });
   }
 };
