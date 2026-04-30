@@ -117,10 +117,10 @@ if (registerForm) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password, role })
       });
-
+     // console.log(res);
       let data = {};
       try { data = await res.json(); } catch (_) {}
-
+      console.log("SERVER RESPONSE:", data);
       if (!res.ok) {
         showMessage(data.message || "Registration failed", "danger");
         return;

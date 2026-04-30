@@ -98,13 +98,36 @@ async function applyJob(button) {
   button.innerText = "Applying...";
 
   try {
-    const res = await fetch(`${API}/application`, {
+    // ✅ STEP 1: get user's resumes
+    const resumeRes = await fetch("http://localhost:5000/api/resume", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    const resumeData = await resumeRes.json();
+
+    if (!resumeRes.ok || !resumeData.data.length) {
+      showMessage("Please create a resume first", "danger");
+      button.disabled = false;
+      button.innerText = "Apply";
+      return;
+    }
+
+    // ✅ STEP 2: take first resume
+    const resumeId = resumeData.data[0]._id;
+
+    // ✅ STEP 3: apply with resumeId
+    const res = await fetch("http://localhost:5000/api/applications", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
+        Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify({ jobId })
+      body: JSON.stringify({
+        jobId,
+        resumeId
+      })
     });
 
     const data = await res.json();
@@ -128,7 +151,6 @@ async function applyJob(button) {
     button.innerText = "Apply";
   }
 }
-
 /* ------------------ MESSAGE FUNCTION ------------------ */
 function showMessage(text, type) {
   const box = document.getElementById("messageBox");
