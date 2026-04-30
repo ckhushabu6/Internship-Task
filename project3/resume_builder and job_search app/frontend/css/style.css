@@ -1,0 +1,57 @@
+/* GLOBAL */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f8fafc;
+  margin: 0;
+}
+
+/* NAVBAR */
+.custom-navbar {
+  background: linear-gradient(90deg, #1e293b, #0f172a);
+}
+
+.navbar-brand {
+  font-size: 1.4rem;
+}
+
+/* HERO SECTION */
+.hero-section {
+  height: 90vh;
+  background: linear-gradient(to right, #2563eb, #1e40af);
+  color: white;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.hero-subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* FEATURE CARDS */
+.feature-card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  transition: 0.3s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-section {
+    height: auto;
+    padding: 60px 0;
+  }
+}

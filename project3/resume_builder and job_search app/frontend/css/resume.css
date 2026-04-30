@@ -1,0 +1,40 @@
+body {
+  background: #f1f5f9;
+}
+
+.card {
+  border-radius: 10px;
+}
+
+input, textarea {
+  border-radius: 8px;
+}
+
+.resume-preview {
+  max-width: 800px;
+  margin: auto;
+  background: #fff;
+}
+
+.section-title {
+  border-bottom: 2px solid #2563eb;
+  display: inline-block;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+}
+
+.skill-badge {
+  background: #2563eb;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  margin: 5px;
+  display: inline-block;
+}
+
+/* mobile spacing */
+@media (max-width: 768px) {
+  .card {
+    padding: 15px;
+  }
+}

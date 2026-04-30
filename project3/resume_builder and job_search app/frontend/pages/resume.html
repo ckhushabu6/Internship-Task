@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume Builder</title>
+
+  <link rel="stylesheet" href="../css/resume.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container my-4">
+
+  <h2 class="text-center mb-4">Create Resume</h2>
+
+  <form id="resumeForm">
+
+    <!-- PERSONAL INFO -->
+    <div class="card p-3 mb-3">
+      <h5>Personal Info</h5>
+
+      <input type="text" id="fullName" class="form-control mb-2" placeholder="Full Name" required>
+      <input type="email" id="email" class="form-control mb-2" placeholder="Email" required>
+      <input type="text" id="phone" class="form-control mb-2" placeholder="Phone">
+      <textarea id="summary" class="form-control" placeholder="Summary"></textarea>
+    </div>
+
+    <!-- SKILLS -->
+    <div class="card p-3 mb-3">
+      <h5>Skills (comma separated)</h5>
+      <input type="text" id="skills" class="form-control" placeholder="React, Node.js, MongoDB">
+    </div>
+
+    <!-- EDUCATION -->
+    <div class="card p-3 mb-3">
+      <h5>Education</h5>
+      <div id="educationContainer"></div>
+      <button type="button" class="btn btn-sm btn-secondary mt-2" onclick="addEducation()">+ Add Education</button>
+    </div>
+
+    <!-- EXPERIENCE -->
+    <div class="card p-3 mb-3">
+      <h5>Experience</h5>
+      <div id="experienceContainer"></div>
+      <button type="button" class="btn btn-sm btn-secondary mt-2" onclick="addExperience()">+ Add Experience</button>
+    </div>
+
+    <button class="btn btn-primary w-100">Save Resume</button>
+
+  </form>
+
+  <!-- SUCCESS MESSAGE -->
+  <div id="successMessage" class="alert alert-success mt-3 d-none">
+    Resume saved successfully!
+  </div>
+
+</div>
+
+<script src="../js/resume.js"></script>
+</body>
+</html>

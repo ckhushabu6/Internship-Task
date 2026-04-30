@@ -1,0 +1,27 @@
+body {
+  background: linear-gradient(to right, #1e3a8a, #2563eb);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.auth-container {
+  min-height: 100vh;
+}
+
+.auth-card {
+  border-radius: 12px;
+  padding: 30px;
+}
+
+.form-control {
+  border-radius: 8px;
+}
+
+.btn-primary {
+  background-color: #2563eb;
+  border: none;
+}
+
+.error-text {
+  font-size: 0.85rem;
+  color: red;
+}
