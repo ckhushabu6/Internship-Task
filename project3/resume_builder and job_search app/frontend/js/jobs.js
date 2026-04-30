@@ -2,14 +2,16 @@ const API = "http://localhost:5000/api";
 
 /* ------------------ FETCH JOBS ------------------ */
 async function fetchJobs() {
-  const skill = document.getElementById("skillInput").value.trim();
-  const location = document.getElementById("locationInput").value.trim();
+  const skill = document.getElementById("skillInput")?.value.trim() || "";
+  const location = document.getElementById("locationInput")?.value.trim() || "";
 
   const container = document.getElementById("jobsContainer");
   const emptyState = document.getElementById("emptyState");
 
+  if (!container) return;
+
   container.innerHTML = "<p>Loading jobs...</p>";
-  emptyState.classList.add("d-none");
+  emptyState?.classList.add("d-none");
 
   try {
     let url = `${API}/jobs`;
@@ -42,9 +44,11 @@ function renderJobs(jobs) {
   const container = document.getElementById("jobsContainer");
   const emptyState = document.getElementById("emptyState");
 
+  if (!container) return;
+
   if (!jobs || jobs.length === 0) {
     container.innerHTML = "";
-    emptyState.classList.remove("d-none");
+    emptyState?.classList.remove("d-none");
     return;
   }
 
@@ -67,7 +71,11 @@ function renderJobs(jobs) {
           ${job.description?.slice(0, 80) || ""}...
         </p>
 
-        <button class="btn btn-success btn-sm mt-auto" onclick="applyJob('${job._id}')">
+        <button 
+          class="btn btn-success btn-sm mt-auto apply-btn" 
+          data-id="${job._id}"
+          onclick="applyJob(this)"
+        >
           Apply
         </button>
 
@@ -77,14 +85,17 @@ function renderJobs(jobs) {
 }
 
 /* ------------------ APPLY JOB ------------------ */
-async function applyJob(jobId) {
+async function applyJob(button) {
+  const jobId = button.getAttribute("data-id");
   const token = localStorage.getItem("token");
 
   if (!token) {
-    alert("Please login first");
     window.location.href = "login.html";
     return;
   }
+
+  button.disabled = true;
+  button.innerText = "Applying...";
 
   try {
     const res = await fetch(`${API}/application`, {
@@ -93,23 +104,43 @@ async function applyJob(jobId) {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
       },
-      body: JSON.stringify({
-        jobId
-      })
+      body: JSON.stringify({ jobId })
     });
 
     const data = await res.json();
 
     if (!res.ok) {
-      alert(data.message);
+      showMessage(data.message || "Application failed", "danger");
+      button.disabled = false;
+      button.innerText = "Apply";
       return;
     }
 
-    alert("Applied successfully!");
+    showMessage("Applied successfully!", "success");
+
+    button.innerText = "Applied";
+    button.classList.remove("btn-success");
+    button.classList.add("btn-secondary");
 
   } catch (err) {
-    alert("Server error");
+    showMessage("Server error", "danger");
+    button.disabled = false;
+    button.innerText = "Apply";
   }
+}
+
+/* ------------------ MESSAGE FUNCTION ------------------ */
+function showMessage(text, type) {
+  const box = document.getElementById("messageBox");
+  if (!box) return;
+
+  box.className = `alert alert-${type} text-center`;
+  box.innerText = text;
+  box.classList.remove("d-none");
+
+  setTimeout(() => {
+    box.classList.add("d-none");
+  }, 3000);
 }
 
 /* ------------------ AUTO LOAD ------------------ */
