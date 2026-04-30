@@ -7,52 +7,68 @@ if (loginForm) {
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
+    // clear old errors
+    document.getElementById("loginEmailError").innerText = "";
+    document.getElementById("loginPasswordError").innerText = "";
+
+    // optional: clear global message
+    if (typeof showMessage === "function") showMessage("", ""); 
+
     const email = document.getElementById("loginEmail").value.trim();
     const password = document.getElementById("loginPassword").value.trim();
 
     let valid = true;
-
-    // validation
     if (!email) {
       document.getElementById("loginEmailError").innerText = "Email required";
       valid = false;
     }
-
     if (!password) {
       document.getElementById("loginPasswordError").innerText = "Password required";
       valid = false;
     }
-
     if (!valid) return;
+
+    const button = loginForm.querySelector("button[type='submit']") || loginForm.querySelector("button");
+    if (button) {
+      button.disabled = true;
+      button.innerText = "Logging in...";
+    }
 
     try {
       const res = await fetch(`${API}/auth/login`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
       });
 
-      const data = await res.json();
+      // safer JSON parse
+      let data = {};
+      try { data = await res.json(); } catch (_) {}
 
       if (!res.ok) {
-        alert(data.message);
+        showMessage(data.message || "Login failed", "danger");
         return;
       }
 
-      // store token
-      localStorage.setItem("token", data.token);
+      if (!data.token || !data.user) {
+        showMessage("Invalid server response", "danger");
+        return;
+      }
 
-      // redirect
-      window.location.href = "dashboard.html";
+      // from main.js
+      saveAuth(data.token, data.user);
+      redirectByRole();
 
-    } catch (error) {
-      alert("Server error");
+    } catch (err) {
+      showMessage("Server error", "danger");
+    } finally {
+      if (button) {
+        button.disabled = false;
+        button.innerText = "Login";
+      }
     }
   });
 }
-
 
 /* ------------------ REGISTER ------------------ */
 const registerForm = document.getElementById("registerForm");
@@ -61,10 +77,14 @@ if (registerForm) {
   registerForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
+    document.getElementById("nameError").innerText = "";
+    document.getElementById("emailError").innerText = "";
+    document.getElementById("passwordError").innerText = "";
+
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
-    const role = document.getElementById("role").value;
+    const role = (document.getElementById("role").value || "user").trim();
 
     let valid = true;
 
@@ -73,8 +93,8 @@ if (registerForm) {
       valid = false;
     }
 
-    if (!email) {
-      document.getElementById("emailError").innerText = "Email required";
+    if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+      document.getElementById("emailError").innerText = "Valid email required";
       valid = false;
     }
 
@@ -85,29 +105,40 @@ if (registerForm) {
 
     if (!valid) return;
 
+    const button = registerForm.querySelector("button[type='submit']") || registerForm.querySelector("button");
+    if (button) {
+      button.disabled = true;
+      button.innerText = "Registering...";
+    }
+
     try {
       const res = await fetch(`${API}/auth/register`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password, role })
       });
 
-      const data = await res.json();
+      let data = {};
+      try { data = await res.json(); } catch (_) {}
 
       if (!res.ok) {
-        alert(data.message);
+        showMessage(data.message || "Registration failed", "danger");
         return;
       }
 
-      alert("Registration successful!");
+      showMessage("Registration successful! Redirecting...", "success");
 
-      // redirect to login
-      window.location.href = "login.html";
+      setTimeout(() => {
+        window.location.href = "login.html";
+      }, 1200);
 
     } catch (error) {
-      alert("Server error");
+      showMessage("Server error", "danger");
+    } finally {
+      if (button) {
+        button.disabled = false;
+        button.innerText = "Register";
+      }
     }
   });
 }
