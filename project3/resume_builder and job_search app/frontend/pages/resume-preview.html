@@ -13,6 +13,41 @@
 
 <div class="container my-4">
 
+  <div class="container my-4">
+
+  <!-- ACTION BUTTONS -->
+  <div class="d-flex justify-content-end gap-2 mb-3">
+    <button class="btn btn-success" onclick="downloadPDF()">Download PDF</button>
+    <button class="btn btn-primary" onclick="editResume()">Edit</button>
+  </div>
+
+  <div class="card p-4 shadow resume-preview" id="resumeContent">
+
+    <!-- HEADER -->
+    <div id="personalInfo" class="mb-4 text-center border-bottom pb-3"></div>
+
+    <!-- SKILLS -->
+    <div class="mb-4">
+      <h5 class="section-title">Skills</h5>
+      <div id="skillsList"></div>
+    </div>
+
+    <!-- EDUCATION -->
+    <div class="mb-4">
+      <h5 class="section-title">Education</h5>
+      <div id="educationList"></div>
+    </div>
+
+    <!-- EXPERIENCE -->
+    <div class="mb-4">
+      <h5 class="section-title">Experience</h5>
+      <div id="experienceList"></div>
+    </div>
+
+  </div>
+
+</div>
+
   <div class="card p-4 shadow resume-preview">
 
     <!-- HEADER -->
@@ -44,6 +79,7 @@
 <script>
   loadResumePreview();
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 </body>
 </html>

@@ -141,8 +141,29 @@ if (form) {
 
 /* ------------------ LOAD PREVIEW ------------------ */
 async function loadResumePreview() {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  // ✅ GET ID FROM URL
+  const params = new URLSearchParams(window.location.search);
+  const resumeId = params.get("id");
+
   try {
-    const res = await fetch(`${API}/resume`, {
+    let url;
+
+    // ✅ IF employer opened specific resume
+    if (resumeId) {
+      url = `${API}/resume/${resumeId}`;
+    } else {
+      // normal user preview
+      url = `${API}/resume`;
+    }
+
+    const res = await fetch(url, {
       headers: {
         "Authorization": `Bearer ${token}`
       }
@@ -150,18 +171,24 @@ async function loadResumePreview() {
 
     const data = await res.json();
 
-    if (!res.ok || !data.data.length) {
+    if (!res.ok) {
+      alert("Failed to load resume");
+      return;
+    }
+
+    const resume = resumeId ? data.data : data.data[0];
+
+    if (!resume) {
       alert("No resume found");
       return;
     }
 
-    renderResume(data.data[0]);
+    renderResume(resume);
 
-  } catch (err) {
+  } catch {
     alert("Server error");
   }
 }
-
 /* ------------------ RENDER ------------------ */
 function renderResume(resume) {
   const p = resume.personalInfo || {};
@@ -192,4 +219,79 @@ function renderResume(resume) {
         <div class="text-muted">${exp.years || ""}</div>
       </div>
     `).join("");
+}
+
+
+
+
+function downloadPDF() {
+  const element = document.getElementById("resumeContent");
+
+  const opt = {
+    margin: 0.5,
+    filename: "My_Resume.pdf",
+    image: { type: "jpeg", quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: "in", format: "a4", orientation: "portrait" }
+  };
+
+  html2pdf().set(opt).from(element).save();
+}
+
+
+function editResume() {
+  const params = new URLSearchParams(window.location.search);
+  const resumeId = params.get("id");
+
+  if (!resumeId) {
+    alert("No resume ID");
+    return;
+  }
+
+  window.location.href = `resume.html?id=${resumeId}`;
+}
+
+
+async function loadResumeForEdit() {
+  const params = new URLSearchParams(window.location.search);
+  const resumeId = params.get("id");
+
+  if (!resumeId) return; // normal create mode
+
+  const token = localStorage.getItem("token");
+
+  const res = await fetch(`http://localhost:5000/api/resume/${resumeId}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+
+  const data = await res.json();
+  const r = data.data;
+
+  // fill form
+  document.getElementById("fullName").value = r.personalInfo.fullName;
+  document.getElementById("email").value = r.personalInfo.email;
+  document.getElementById("phone").value = r.personalInfo.phone;
+  document.getElementById("summary").value = r.personalInfo.summary;
+
+  document.getElementById("skills").value = r.skills.join(",");
+
+  // education
+  r.education.forEach(e => {
+    addEducation();
+    const last = document.querySelector("#educationContainer > div:last-child");
+
+    last.querySelector(".degree").value = e.degree;
+    last.querySelector(".institution").value = e.institution;
+    last.querySelector(".year").value = e.year;
+  });
+
+  // experience
+  r.experience.forEach(e => {
+    addExperience();
+    const last = document.querySelector("#experienceContainer > div:last-child");
+
+    last.querySelector(".company").value = e.company;
+    last.querySelector(".role").value = e.role;
+    last.querySelector(".years").value = e.years;
+  });
 }
